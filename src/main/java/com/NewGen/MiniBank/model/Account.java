@@ -24,7 +24,7 @@ public class Account {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private Users users;
 
 //    version (@Version)
 }

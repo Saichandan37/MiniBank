@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,6 +23,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
 
-    @ManyToMany(mappedBy = "role")
-    private List<Users> user;
+    @ManyToMany(mappedBy = "roles")
+    private List<Users> users;
+
+    public Role(RoleName roleName) {
+        this.roleName=roleName;
+    }
 }
