@@ -22,9 +22,6 @@ public class RoleLoadData implements CommandLineRunner {
     RoleRepo roleRepo;
 
 
-
-
-
     @Override
     public void run(String... args) throws Exception {
         if(roleRepo.count()==0) {
@@ -32,7 +29,6 @@ public class RoleLoadData implements CommandLineRunner {
             roleRepo.save(new Role(RoleName.ROLE_MODERATOR));
             roleRepo.save(new Role(RoleName.ROLE_ADMIN));
             roleRepo.save(new Role(RoleName.ROLE_SUPPORT));
-
         }
 
     }

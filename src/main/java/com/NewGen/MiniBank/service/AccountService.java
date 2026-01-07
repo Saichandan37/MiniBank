@@ -1,17 +1,22 @@
 package com.NewGen.MiniBank.service;
 
 
+import com.NewGen.MiniBank.dto.AccountRequest;
+import com.NewGen.MiniBank.dto.AccountResponse;
+import com.NewGen.MiniBank.enums.AccountType;
 import com.NewGen.MiniBank.model.Account;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface AccountService {
 
-//    Account createAccount(Long userId, AccountType type);
+    AccountResponse createAccount(AccountRequest accountRequest);
 
-    Account getAccountById(Long accountId);
+    AccountResponse getAccountById(Long accountId);
 
-    List<Account> getAccountsByUser(Long userId);
+    Page<AccountResponse> getAccountsByUser(int userId, Pageable pageable);
 
     void closeAccount(Long accountId);
 }
