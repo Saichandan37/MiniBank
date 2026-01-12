@@ -12,6 +12,7 @@ import com.NewGen.MiniBank.model.Users;
 import com.NewGen.MiniBank.repo.AccountRepo;
 import com.NewGen.MiniBank.repo.UserRepo;
 import com.NewGen.MiniBank.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class AccountServiceImpl implements AccountService {
     private UserRepo userRepo;
     private AccountRepo accountRepo;
 
+    @Autowired
     public AccountServiceImpl(UserRepo userRepo,AccountRepo accountRepo){
         this.userRepo=userRepo;
         this.accountRepo=accountRepo;
