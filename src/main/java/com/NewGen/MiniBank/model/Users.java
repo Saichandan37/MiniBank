@@ -26,7 +26,7 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String username;
 
     @Column(nullable = false)

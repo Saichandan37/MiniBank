@@ -16,8 +16,10 @@ import com.NewGen.MiniBank.repo.UserRepo;
 import com.NewGen.MiniBank.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
@@ -25,10 +27,14 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Lazy
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     RoleRepo roleRepo;
@@ -43,8 +49,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserRequest userRequest){
         Role role=roleRepo.findByRoleName(userRequest.getRoleName()).orElseThrow(()->new RoleNotFoundException("Unknown role"));
+
         Set<Role> roles=Set.of(role);
         Users user = convert.toEntity(userRequest, roles);
+        user.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
         user.setAccountStatus(AccountStatus.ACTIVE);
         user.setStatus(UserStatus.USER_ACTIVE);
         userRepo.save(user);
