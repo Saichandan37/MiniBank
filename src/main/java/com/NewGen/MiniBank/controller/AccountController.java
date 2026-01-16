@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +32,12 @@ public class AccountController {
      return new ResponseEntity<>(accountResponse, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/{userId}/accounts")
     public ResponseEntity<Page<AccountResponse>> getAccountsByUser(@PathVariable int userId,
                                                                    @RequestParam(defaultValue = "0") int page,
                                                                    @RequestParam(defaultValue = "10") int size,
-                                                                   @RequestParam(defaultValue = "createdAt") String sortBy,
+                                                                   @RequestParam(defaultValue = "accountNumber") String sortBy,
                                                                    @RequestParam(defaultValue = "DESC") String direction){
         Pageable pageable = PageRequest.of(
                 page,
