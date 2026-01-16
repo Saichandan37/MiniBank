@@ -1,5 +1,7 @@
 package com.NewGen.MiniBank.config;
 
+import com.NewGen.MiniBank.exception.CustomAccessDeniedHandler;
+import com.NewGen.MiniBank.exception.CustomAuthenticationEntryPoint;
 import com.NewGen.MiniBank.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +23,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity // Keep this to enable the custom chain
 public class WebSecurityConfig {
 
+
+    private final CustomAuthenticationEntryPoint authEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtFilter jwtFilter;
 
-    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService,JwtFilter jwtFilter) {
+    public WebSecurityConfig(CustomAuthenticationEntryPoint authEntryPoint, CustomAccessDeniedHandler accessDeniedHandler, CustomUserDetailsService customUserDetailsService, JwtFilter jwtFilter) {
+        this.authEntryPoint = authEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
         this.customUserDetailsService = customUserDetailsService;
         this.jwtFilter=jwtFilter;
     }
@@ -40,6 +47,10 @@ public class WebSecurityConfig {
 //                .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
                 .build();
     }
 
