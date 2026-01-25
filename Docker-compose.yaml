@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres-springboot:
+    image: postgres:16
+    container_name: minibank-postgres
+    ports:
+      - "5332:5432"
+    environment:
+      POSTGRES_DB: minibank
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Apple@14
+    volumes:
+      - minibank_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin-minibank:
+    image: dpage/pgadmin4
+    container_name: minibank-pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@minibank.com
+      PGADMIN_DEFAULT_PASSWORD: Apple@14
+    volumes:
+      - minibank_pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres-springboot
+    restart: unless-stopped
+
+  minibank-app:
+    image: minibank:v1.0
+    container_name: minibank-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres-springboot:5432/minibank
+      DB_USERNAME: admin
+      DB_PASSWORD: Apple@14
+      GITHUB_CLIENT_ID: Ov23liyOck8KMmOcd3rn
+      GITHUB_CLIENT_SECRET: d41670c41a8a0b9da5d4717bbb269f8bd9766c63
+    depends_on:
+      - postgres-springboot
+    restart: unless-stopped
+
+volumes:
+  minibank_postgres_data:
+  minibank_pgadmin_data:
